@@ -44,3 +44,10 @@ class SQLAlchemyModelFactory(base.Factory):
         obj = model_class(*args, **kwargs)
         session.add(obj)
         return obj
+
+class FlushingSQLAlchemyModelFactory(SQLAlchemyModelFactory):
+    """Factory similar to `SQLAlchemyModelFactory` that does a flush on the session after adding the Model Object"""
+    @classmethod
+    def _create(cls, *args, **kwargs):
+        obj = super(FlushingSQLAlchemyModelFactory, cls)._create(*args, **kwargs)
+        cls._meta.sqlalchemy_session.flush()
